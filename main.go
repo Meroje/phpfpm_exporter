@@ -65,17 +65,17 @@ func main() {
 	prometheus.MustRegister(exporter)
 	prometheus.MustRegister(version.NewCollector("phpfpm_exporter"))
 
+	gatherer := prometheus.Gatherers{prometheus.DefaultGatherer}
 	if len(*scriptCollectorPaths) != 0 {
-		prometheus.DefaultGatherer = prometheus.Gatherers{
-			prometheus.DefaultGatherer,
+		gatherer = append(gatherer,
 			prometheus.GathererFunc(func() ([]*client_model.MetricFamily, error) {
 				return CollectMetricsFromScript(sockets, *scriptCollectorPaths)
 			}),
-		}
+		)
 	}
 
 	log.Infoln("Listening on", *listenAddress)
-	http.Handle(*metricsPath, promhttp.Handler())
+	http.Handle(*metricsPath, promhttp.HandlerFor(gatherer, promhttp.HandlerOpts{ErrorHandling: promhttp.ContinueOnError}))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
 			<head><title>PHP-FPM Exporter</title></head>
