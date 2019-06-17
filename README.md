@@ -7,7 +7,7 @@
 
 Prometheus Exporter for the PHP-FPM status page.
 
-Metrics are scrapped via unix socket and made available on port 9253.
+Metrics are scrapped via unix socket and made available on port 9127.
 
 This exporter also provides a way for embedding the output of arbitrary
 PHP scripts into its metrics page, analogous to the node exporter's
@@ -38,7 +38,7 @@ Bear in mind these metrics are global, all FPM pools share the same cache.
 Run with Docker
 ```
 SOCK="/run/php/php7.2-fpm.sock"; \
-docker run -d -p 9253:9253 -v $SOCK:$SOCK  \
+docker run -d -p 9127:9127 -v $SOCK:$SOCK  \
 lusotycoon/phpfpm-exporter \
 --phpfpm.socket-paths=$SOCK
 ```
@@ -50,7 +50,7 @@ Help on flags
 
     Flags:
       -h, --help     Show context-sensitive help (also try --help-long and --help-man).
-          --web.listen-address=":9253"
+          --web.listen-address=":9127"
                      Address to listen on for web interface and telemetry.
           --web.telemetry-path="/metrics"
                      Path under which to expose metrics.
