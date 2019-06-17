@@ -1,13 +1,11 @@
-# PHP-FPM Exporter for Prometheus [![Build Status][buildstatus]][circleci]
+# PHP-FPM Exporter [![Build Status](https://travis-ci.org/Meroje/phpfpm_exporter.svg)][travis]
 
-[![GitHub release](https://img.shields.io/github/release/Lusitaniae/phpfpm_exporter.svg)][release]
-![GitHub Downloads](https://img.shields.io/github/downloads/Lusitaniae/phpfpm_exporter/total.svg)
-[![Docker Repository on Quay](https://quay.io/repository/Lusitaniae/phpfpm-exporter/status)][quay]
-[![Docker Pulls](https://img.shields.io/docker/pulls/lusotycoon/phpfpm-exporter.svg?maxAge=604800)][hub]
+[![CircleCI](https://circleci.com/gh/Meroje/phpfpm_exporter/tree/master.svg?style=shield)][circleci]
+[![Docker Repository on Quay](https://quay.io/repository/meroje/phpfpm-exporter/status)][quay]
+[![Docker Pulls](https://img.shields.io/docker/pulls/meroje/phpfpm-exporter.svg?maxAge=604800)][hub]
 
-Prometheus Exporter for the PHP-FPM status page.
-
-Metrics are scrapped via unix socket and made available on port 9127.
+Prometheus exporter for php-fpm.
+Exports metrics at `9127/metrics`
 
 This exporter also provides a way for embedding the output of arbitrary
 PHP scripts into its metrics page, analogous to the node exporter's
@@ -39,7 +37,7 @@ Run with Docker
 ```
 SOCK="/run/php/php7.2-fpm.sock"; \
 docker run -d -p 9127:9127 -v $SOCK:$SOCK  \
-lusotycoon/phpfpm-exporter \
+meroje/phpfpm-exporter \
 --phpfpm.socket-paths=$SOCK
 ```
 
@@ -66,22 +64,22 @@ Help on flags
 
 When using `--phpfpm.socket-directories`  make sure to use dedicated directories for PHP-FPM sockets to avoid timeouts.
 
-# Metrics emitted by PHP-FPM:
+## Metrics
 
-```
-php_fpm_accepted_connections_total{socket_path="/var/run/phpfpm.sock"} 300940
-php_fpm_active_processes{socket_path="/var/run/phpfpm.sock"} 1
-php_fpm_idle_processes{socket_path="/var/run/phpfpm.sock"} 5
-php_fpm_listen_queue{socket_path="/var/run/phpfpm.sock"} 0
-php_fpm_listen_queue_length{socket_path="/var/run/phpfpm.sock"} 0
-php_fpm_max_active_processes{socket_path="/var/run/phpfpm.sock"} 10
-php_fpm_max_children_reached{socket_path="/var/run/phpfpm.sock"} 3
-php_fpm_max_listen_queue{socket_path="/var/run/phpfpm.sock"} 0
-php_fpm_slow_requests{socket_path="/var/run/phpfpm.sock"} 0
-php_fpm_start_time_seconds{socket_path="/var/run/phpfpm.sock"} 1.49277445e+09
-php_fpm_total_processes{socket_path="/var/run/phpfpm.sock"} 3
-php_fpm_up{socket_path="/var/run/phpfpm.sock"} 1
-```
+|FPM column|Prometheus Metric|Description|
+|----------|-----------------|-----------|
+accepted conn | php_fpm_accepted_connections_total | Number of request accepted by the pool.
+listen queue | php_fpm_active_processes | Number of request in the queue of pending connections.
+max listen queue | php_fpm_idle_processes | Maximum number of requests in the queue of pending connections since FPM has started.
+listen queue len | php_fpm_listen_queue | The size of the socket queue of pending connections.
+idle processes | php_fpm_listen_queue_length | Number of idle processes.
+active processes | php_fpm_max_active_processes | Number of active processes.
+total processes | php_fpm_max_children_reached | Number of total processes.
+max active processes | php_fpm_max_listen_queue | Maximum number of active processes since FPM has started.
+max children reached | php_fpm_slow_requests | Number of times, the process limit has been reached.
+start time | php_fpm_start_time_seconds | Unix time when FPM has started or reloaded.
+slow requests | php_fpm_total_processes | Enable php-fpm slow-log before you consider this. If this value is non-zero you may have slow php processes.
+
 # Requirements
 
 The FPM status page must be enabled in every pool you'd like to monitor by defining `pm.status_path = /status`.
@@ -99,8 +97,8 @@ Basic:
 Multi Pool:
 ![multi pool](https://grafana.com/api/dashboards/5714/images/3608/image)
 
-[buildstatus]: https://circleci.com/gh/Lusitaniae/phpfpm_exporter/tree/master.svg?style=shield
-[circleci]: https://circleci.com/gh/Lusitaniae/phpfpm_exporter
-[quay]: https://quay.io/repository/Lusitaniae/phpfpm-exporter
-[hub]: https://hub.docker.com/r/lusotycoon/phpfpm-exporter/
-[release]: https://github.com/Lusitaniae/phpfpm_exporter/releases/latest
+
+[travis]: https://travis-ci.org/Meroje/phpfpm_exporter
+[circleci]: https://circleci.com/gh/Meroje/phpfpm_exporter
+[quay]: https://quay.io/repository/meroje/phpfpm-exporter
+[hub]: https://hub.docker.com/r/meroje/phpfpm-exporter/
