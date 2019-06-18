@@ -15,7 +15,7 @@ metrics printed by the PHP script will be merged into the metrics
 provided by this exported. An example use case includes printing metrics
 for PHP's `opcache`.
 
-# Usage:
+## Usage:
 
 Run the exporter
 ```
@@ -80,11 +80,11 @@ max children reached | php_fpm_slow_requests | Number of times, the process limi
 start time | php_fpm_start_time_seconds | Unix time when FPM has started or reloaded.
 slow requests | php_fpm_total_processes | Enable php-fpm slow-log before you consider this. If this value is non-zero you may have slow php processes.
 
-# Requirements
+## Requirements
 
 The FPM status page must be enabled in every pool you'd like to monitor by defining `pm.status_path = /status`.
 
-# Grafana Dashboards
+## Grafana Dashboards
 There's multiple grafana dashboards available for this exporter, find them at the urls below or in ```contrib/```.
 
 [Basic:](https://grafana.com/dashboards/5579) for analyzing a single fpm pool in detail.

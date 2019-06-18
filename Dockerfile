@@ -1,6 +1,10 @@
-FROM quay.io/prometheus/busybox:latest
+ARG ARCH="amd64"
+ARG OS="linux"
+FROM quay.io/prometheus/busybox-${OS}-${ARCH}:latest
 
-COPY phpfpm_exporter /bin/phpfpm_exporter
+ARG ARCH="amd64"
+ARG OS="linux"
+COPY .build/${OS}-${ARCH}/phpfpm_exporter /bin/phpfpm_exporter
 
 ENTRYPOINT ["/bin/phpfpm_exporter"]
 EXPOSE     9127
